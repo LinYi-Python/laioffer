@@ -16,6 +16,9 @@ class Solution1 {
         if(array == null || array.length == 0){
             return new int[0];
         }
+        if(k == 0){
+            return new int[0];
+        }
         Arrays.sort(array);
         int[] res = new int[k];
         for(int i = 0; i < k; i++){
@@ -29,12 +32,15 @@ class Solution1 {
 //Space O(1)
 
 
-//method2
+//method2 using maxHeap
 class Solution2 {
     public int[] kSmallest(int[] array, int k) {
         // Write your solution here
         if(array == null || array.length == 0 || k == 0){
             return array;
+        }
+        if(k == 0){
+            return new int[0];
         }
         PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(k, new Comparator<Integer>(){
             public int compare(Integer o1, Integer o2){
@@ -128,4 +134,101 @@ class Solution3 {
         System.out.println(result.toString());
     }
 
+}
+
+
+//method4 using MAXheap
+class Solution4 {
+    public int[] kSmallest(int[] array, int k) {
+        // Write your solution here
+        if(array == null || array.length == 0 || k == 0){
+            return array;
+        }
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(k, new Comparator<Integer>(){
+            @Override
+            public int compare(Integer o1, Integer o2){
+                if(o1.equals(o2)){
+                    return 0;
+                }
+                return o1 > o2? 1: -1;
+            }
+        } );
+
+        for(int i = 0; i < array.length; i++){
+//            if(maxHeap.peek() == null){
+//                maxHeap.offer(array[i]);
+//            }
+//            else if(array[i] > maxHeap.peek()){
+//                maxHeap.poll();
+//                maxHeap.offer(array[i]);
+//            }else{
+//                maxHeap.offer(array[i]);
+//            }
+            maxHeap.offer(array[i]);
+            if(maxHeap.size() > k){
+                maxHeap.poll();
+            }
+        }
+
+        int[] result = new int[k];
+        
+        for(int i = k - 1; i >= 0; i--){
+            result[i] = maxHeap.poll();
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Solution2 test = new Solution2();
+        int[] array = new int[]{1};
+        int k = 0;
+        int[] result = test.kSmallest(array, k);
+        System.out.println(result.toString());
+    }
+//Time :O(K + (N - K) logK )
+    //Space : O(K)
+
+}
+
+
+class Solution5 {
+    public int findKthLargest(int[] nums, int k) {
+        int heapSize = nums.length;
+        buildMaxHeap(nums, heapSize);
+        for(int i = nums.length - 1; i >= nums.length - k + 1; i--){
+            swap(nums, 0, i);
+            heapSize--;
+            maxHeapify(nums, 0, heapSize);
+        }
+        return nums[0];
+    }
+
+    public void buildMaxHeap(int[] a, int heapSize){
+        for(int i = heapSize/2; i >= 0; i--){
+            maxHeapify(a, i, heapSize);
+        }
+    }
+
+    public void maxHeapify(int[] a, int i, int heapSize){
+        int l = i * 2 + 1;
+        int r = i * 2 + 2;
+        int largest = i;
+        if(l < heapSize && a[l] > a[largest]){
+            largest = l;
+        }
+        if(r < heapSize && a[r] > a[largest]){
+            largest = r;
+        }
+        if(largest != i){
+            swap(a, i, largest);
+            maxHeapify(a, largest, heapSize);
+        }
+
+    }
+
+    public void swap(int[] a, int i, int j){
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
 }
