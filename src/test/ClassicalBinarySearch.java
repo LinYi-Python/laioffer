@@ -1,4 +1,4 @@
-package binarySearch;
+package test;
 
 public class ClassicalBinarySearch {
     public int binarySearch(int[] array, int target) {
