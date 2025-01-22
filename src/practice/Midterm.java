@@ -136,10 +136,10 @@ class Test3A {
         cutCnt[0] = 0;
         cutCnt[1] = 0;
 
-        for (int i = 2; i <= len; ++i) {
+        for (int i = 2; i <= len; i++) {
             int minCut = Integer.MAX_VALUE;
 
-            for (int j = 0; j < i; ++j) {
+            for (int j = 0; j < i; j++) {
                 if (isPalindrome(input, j, i - 1)) {
                     minCut = j == 0 ? 0 : Math.min(minCut, cutCnt[j] + 1);
                 }
